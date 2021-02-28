@@ -1,0 +1,204 @@
+﻿@page
+@model RegisterModel
+@{
+    ViewData["Title"] = "S’inscrire";
+}
+<div class="row" style=" margin:0; padding: 0">
+    <div id="register-div-1" class="col-5">
+        <br />
+        <h2>Hey-Eco</h2>
+        <br />
+        <div>
+            <img style="width: 100%" src="~/img/idea.png" />
+        </div>
+        <br />
+        <h6>&copy; TechM-Studio 2021</h6>
+    </div>
+    <div id="register-div-2" class="col">
+        <form asp-route-returnUrl="@Model.ReturnUrl" method="post">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="row">
+                <div class="col">
+                    <svg width="127" height="24" viewBox="0 0 127 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M8.51 23.3C5.97 23.3 3.59 22.82 1.37 21.86C1.13 21.76 0.93 21.6 0.77 21.38C0.61 21.14 0.53 20.89 0.53 20.63C0.53 20.29 0.64 20 0.86 19.76C1.1 19.5 1.4 19.37 1.76 19.37C1.96 19.37 2.15 19.41 2.33 19.49C4.17 20.31 6.14 20.72 8.24 20.72C11.74 20.72 13.49 19.57 13.49 17.27C13.49 16.67 13.26 16.17 12.8 15.77C12.36 15.37 11.81 15.06 11.15 14.84C10.49 14.6 9.55 14.32 8.33 14C6.71 13.58 5.4 13.18 4.4 12.8C3.4 12.4 2.54 11.81 1.82 11.03C1.1 10.25 0.74 9.21 0.74 7.91C0.74 6.77 1.04 5.74 1.64 4.82C2.24 3.88 3.12 3.14 4.28 2.6C5.46 2.04 6.87 1.76 8.51 1.76C10.71 1.76 12.7 2.09 14.48 2.75C15.04 2.95 15.32 3.35 15.32 3.95C15.32 4.27 15.21 4.56 14.99 4.82C14.77 5.08 14.48 5.21 14.12 5.21C14 5.21 13.84 5.17 13.64 5.09C12.08 4.55 10.47 4.28 8.81 4.28C7.23 4.28 5.94 4.58 4.94 5.18C3.96 5.78 3.47 6.62 3.47 7.7C3.47 8.42 3.7 9.01 4.16 9.47C4.64 9.91 5.23 10.26 5.93 10.52C6.65 10.76 7.62 11.02 8.84 11.3C10.42 11.68 11.69 12.06 12.65 12.44C13.63 12.82 14.46 13.41 15.14 14.21C15.84 15.01 16.19 16.09 16.19 17.45C16.19 18.57 15.87 19.58 15.23 20.48C14.59 21.36 13.69 22.05 12.53 22.55C11.37 23.05 10.03 23.3 8.51 23.3ZM20.2463 8.69C20.0063 8.69 19.7963 8.6 19.6163 8.42C19.4563 8.24 19.3763 8.03 19.3763 7.79C19.3763 7.47 19.5263 7.22 19.8263 7.04C20.3263 6.74 20.7063 6.39 20.9663 5.99C21.2263 5.59 21.3563 5.01 21.3563 4.25H21.2363C20.7763 4.25 20.3763 4.09 20.0363 3.77C19.7163 3.43 19.5563 3.03 19.5563 2.57V2.39C19.5563 1.93 19.7163 1.54 20.0363 1.22C20.3763 0.879999 20.7763 0.709999 21.2363 0.709999H21.5363C21.9963 0.709999 22.3863 0.879999 22.7063 1.22C23.0463 1.54 23.2163 1.93 23.2163 2.39V4.16C23.2163 6.08 22.3963 7.54 20.7563 8.54C20.5963 8.64 20.4263 8.69 20.2463 8.69ZM28.2948 4.58C27.8748 4.58 27.5148 4.43 27.2148 4.13C26.9148 3.83 26.7648 3.47 26.7648 3.05V2.93C26.7648 2.51 26.9148 2.15 27.2148 1.85C27.5148 1.55 27.8748 1.4 28.2948 1.4H28.4748C28.8948 1.4 29.2548 1.55 29.5548 1.85C29.8548 2.15 30.0048 2.51 30.0048 2.93V3.05C30.0048 3.47 29.8548 3.83 29.5548 4.13C29.2548 4.43 28.8948 4.58 28.4748 4.58H28.2948ZM28.3548 23.15C27.9748 23.15 27.6548 23.02 27.3948 22.76C27.1348 22.5 27.0048 22.18 27.0048 21.8V8.93C27.0048 8.55 27.1348 8.23 27.3948 7.97C27.6548 7.69 27.9748 7.55 28.3548 7.55C28.7548 7.55 29.0848 7.68 29.3448 7.94C29.6048 8.2 29.7348 8.53 29.7348 8.93V21.8C29.7348 22.18 29.5948 22.5 29.3148 22.76C29.0548 23.02 28.7348 23.15 28.3548 23.15ZM35.8255 23.15C35.4455 23.15 35.1255 23.02 34.8655 22.76C34.6055 22.5 34.4755 22.18 34.4755 21.8V8.93C34.4755 8.55 34.6055 8.23 34.8655 7.97C35.1255 7.69 35.4455 7.55 35.8255 7.55C36.2055 7.55 36.5255 7.69 36.7855 7.97C37.0655 8.23 37.2055 8.55 37.2055 8.93V10.16C37.9655 9.32 38.7855 8.65 39.6655 8.15C40.5455 7.65 41.5855 7.4 42.7855 7.4C43.8855 7.4 44.8355 7.66 45.6355 8.18C46.4555 8.7 47.0755 9.41 47.4955 10.31C47.9355 11.21 48.1555 12.2 48.1555 13.28V21.8C48.1555 22.18 48.0155 22.5 47.7355 22.76C47.4755 23.02 47.1555 23.15 46.7755 23.15C46.3955 23.15 46.0755 23.02 45.8155 22.76C45.5555 22.5 45.4255 22.18 45.4255 21.8V13.58C45.4255 11.14 44.3255 9.92 42.1255 9.92C41.1255 9.92 40.2255 10.18 39.4255 10.7C38.6455 11.22 37.9055 11.92 37.2055 12.8V21.8C37.2055 22.18 37.0655 22.5 36.7855 22.76C36.5255 23.02 36.2055 23.15 35.8255 23.15ZM57.7067 23.3C55.7067 23.3 53.8867 22.85 52.2467 21.95C51.9067 21.71 51.7367 21.38 51.7367 20.96C51.7367 20.64 51.8467 20.36 52.0667 20.12C52.2867 19.88 52.5667 19.76 52.9067 19.76C53.0867 19.76 53.2667 19.8 53.4467 19.88C54.0867 20.16 54.7267 20.38 55.3667 20.54C56.0067 20.7 56.7267 20.78 57.5267 20.78C59.7467 20.78 60.8567 20.07 60.8567 18.65C60.8567 18.19 60.5967 17.84 60.0767 17.6C59.5767 17.36 58.7467 17.09 57.5867 16.79C56.4067 16.51 55.4267 16.22 54.6467 15.92C53.8867 15.62 53.2267 15.17 52.6667 14.57C52.1267 13.95 51.8567 13.14 51.8567 12.14C51.8567 10.74 52.3567 9.6 53.3567 8.72C54.3767 7.84 55.8267 7.4 57.7067 7.4C59.2467 7.4 60.6967 7.65 62.0567 8.15C62.3367 8.23 62.5467 8.38 62.6867 8.6C62.8467 8.82 62.9267 9.05 62.9267 9.29C62.9267 9.61 62.8067 9.89 62.5667 10.13C62.3467 10.37 62.0667 10.49 61.7267 10.49C61.6267 10.49 61.4967 10.47 61.3367 10.43C60.1767 10.07 59.0367 9.89 57.9167 9.89C56.8367 9.89 55.9867 10.09 55.3667 10.49C54.7667 10.87 54.4667 11.37 54.4667 11.99C54.4667 12.59 54.7467 13.03 55.3067 13.31C55.8667 13.59 56.7367 13.86 57.9167 14.12C59.0967 14.42 60.0567 14.72 60.7967 15.02C61.5367 15.3 62.1667 15.75 62.6867 16.37C63.2267 16.99 63.4967 17.82 63.4967 18.86C63.4967 20.14 62.9867 21.2 61.9667 22.04C60.9667 22.88 59.5467 23.3 57.7067 23.3ZM74.2508 23.3C72.8108 23.3 71.4808 22.98 70.2608 22.34C69.0408 21.7 68.0608 20.78 67.3208 19.58C66.6008 18.38 66.2408 16.97 66.2408 15.35C66.2408 13.73 66.6008 12.32 67.3208 11.12C68.0608 9.92 69.0408 9 70.2608 8.36C71.4808 7.72 72.8108 7.4 74.2508 7.4C75.3108 7.4 76.2208 7.54 76.9808 7.82C77.7608 8.08 78.4808 8.42 79.1408 8.84C79.5408 9.1 79.7408 9.45 79.7408 9.89C79.7408 10.19 79.6208 10.47 79.3808 10.73C79.1608 10.97 78.9008 11.09 78.6008 11.09C78.3808 11.09 78.1608 11.03 77.9408 10.91C77.2808 10.57 76.7108 10.33 76.2308 10.19C75.7708 10.03 75.1908 9.95 74.4908 9.95C72.7708 9.95 71.4208 10.45 70.4408 11.45C69.4608 12.43 68.9708 13.73 68.9708 15.35C68.9708 16.97 69.4608 18.28 70.4408 19.28C71.4208 20.26 72.7708 20.75 74.4908 20.75C75.1908 20.75 75.7708 20.68 76.2308 20.54C76.7108 20.38 77.2808 20.13 77.9408 19.79C78.1608 19.67 78.3808 19.61 78.6008 19.61C78.9008 19.61 79.1608 19.74 79.3808 20C79.6208 20.24 79.7408 20.51 79.7408 20.81C79.7408 21.25 79.5408 21.6 79.1408 21.86C78.4808 22.28 77.7608 22.63 76.9808 22.91C76.2208 23.17 75.3108 23.3 74.2508 23.3ZM84.5169 23.15C84.1369 23.15 83.8169 23.02 83.5569 22.76C83.2969 22.5 83.1669 22.18 83.1669 21.8V8.93C83.1669 8.55 83.2969 8.23 83.5569 7.97C83.8169 7.69 84.1369 7.55 84.5169 7.55C84.8969 7.55 85.2169 7.69 85.4769 7.97C85.7569 8.23 85.8969 8.55 85.8969 8.93V10.22C87.2969 8.34 88.8669 7.4 90.6069 7.4H90.7569C91.1369 7.4 91.4469 7.53 91.6869 7.79C91.9469 8.05 92.0769 8.37 92.0769 8.75C92.0769 9.13 91.9469 9.44 91.6869 9.68C91.4269 9.92 91.0969 10.04 90.6969 10.04H90.5469C89.5869 10.04 88.7069 10.28 87.9069 10.76C87.1069 11.22 86.4369 11.86 85.8969 12.68V21.8C85.8969 22.18 85.7569 22.5 85.4769 22.76C85.2169 23.02 84.8969 23.15 84.5169 23.15ZM95.9413 4.58C95.5213 4.58 95.1613 4.43 94.8613 4.13C94.5613 3.83 94.4113 3.47 94.4113 3.05V2.93C94.4113 2.51 94.5613 2.15 94.8613 1.85C95.1613 1.55 95.5213 1.4 95.9413 1.4H96.1213C96.5413 1.4 96.9013 1.55 97.2013 1.85C97.5013 2.15 97.6513 2.51 97.6513 2.93V3.05C97.6513 3.47 97.5013 3.83 97.2013 4.13C96.9013 4.43 96.5413 4.58 96.1213 4.58H95.9413ZM96.0013 23.15C95.6213 23.15 95.3013 23.02 95.0413 22.76C94.7813 22.5 94.6513 22.18 94.6513 21.8V8.93C94.6513 8.55 94.7813 8.23 95.0413 7.97C95.3013 7.69 95.6213 7.55 96.0013 7.55C96.4013 7.55 96.7313 7.68 96.9913 7.94C97.2513 8.2 97.3813 8.53 97.3813 8.93V21.8C97.3813 22.18 97.2413 22.5 96.9613 22.76C96.7013 23.02 96.3813 23.15 96.0013 23.15ZM103.472 23.15C103.092 23.15 102.772 23.02 102.512 22.76C102.252 22.5 102.122 22.18 102.122 21.8V8.93C102.122 8.55 102.252 8.23 102.512 7.97C102.772 7.69 103.092 7.55 103.472 7.55C103.852 7.55 104.172 7.69 104.432 7.97C104.712 8.23 104.852 8.55 104.852 8.93V10.22C106.252 8.34 107.822 7.4 109.562 7.4H109.712C110.092 7.4 110.402 7.53 110.642 7.79C110.902 8.05 111.032 8.37 111.032 8.75C111.032 9.13 110.902 9.44 110.642 9.68C110.382 9.92 110.052 10.04 109.652 10.04H109.502C108.542 10.04 107.662 10.28 106.862 10.76C106.062 11.22 105.392 11.86 104.852 12.68V21.8C104.852 22.18 104.712 22.5 104.432 22.76C104.172 23.02 103.852 23.15 103.472 23.15ZM120.007 23.3C117.567 23.3 115.657 22.61 114.277 21.23C112.917 19.83 112.237 17.87 112.237 15.35C112.237 13.93 112.497 12.62 113.017 11.42C113.537 10.22 114.337 9.25 115.417 8.51C116.497 7.77 117.827 7.4 119.407 7.4C120.887 7.4 122.167 7.75 123.247 8.45C124.327 9.13 125.147 10.05 125.707 11.21C126.267 12.35 126.547 13.6 126.547 14.96C126.547 15.34 126.417 15.66 126.157 15.92C125.917 16.18 125.587 16.31 125.167 16.31H114.997C115.157 17.71 115.677 18.8 116.557 19.58C117.437 20.36 118.667 20.75 120.247 20.75C121.087 20.75 121.817 20.67 122.437 20.51C123.077 20.35 123.697 20.12 124.297 19.82C124.457 19.74 124.637 19.7 124.837 19.7C125.157 19.7 125.437 19.81 125.677 20.03C125.917 20.25 126.037 20.53 126.037 20.87C126.037 21.31 125.777 21.68 125.257 21.98C124.477 22.42 123.707 22.75 122.947 22.97C122.187 23.19 121.207 23.3 120.007 23.3ZM123.847 14.09C123.787 13.11 123.527 12.29 123.067 11.63C122.627 10.97 122.077 10.49 121.417 10.19C120.757 9.87 120.087 9.71 119.407 9.71C118.727 9.71 118.057 9.87 117.397 10.19C116.737 10.49 116.187 10.97 115.747 11.63C115.307 12.29 115.057 13.11 114.997 14.09H123.847Z" fill="url(#paint0_linear)" />
+                        <defs>
+                            <linearGradient id="paint0_linear" x1="-1" y1="-4" x2="16.8429" y2="62.035" gradientUnits="userSpaceOnUse">
+                                <stop stop-color="#0E7BA1" />
+                                <stop offset="1" stop-color="#153093" />
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <label asp-for="Input.Name"></label>
+                        <input asp-for="Input.Name" class="form-control" />
+                        <span asp-validation-for="Input.Name" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Input.FirstName"></label>
+                        <input asp-for="Input.FirstName" class="form-control" />
+                        <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Input.ProfessionalActivity"></label>
+                        <input asp-for="Input.ProfessionalActivity" class="form-control" />
+                        <span asp-validation-for="Input.ProfessionalActivity" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Input.ProfessionalActivityDomaine"></label>
+                        <input asp-for="Input.ProfessionalActivityDomaine" class="form-control" />
+                        <span asp-validation-for="Input.ProfessionalActivityDomaine" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Input.Address"></label>
+                        <input asp-for="Input.Address" class="form-control" />
+                        <span asp-validation-for="Input.Address" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Input.Enterprise"></label>
+                        <input asp-for="Input.Enterprise" class="form-control" />
+                        <span asp-validation-for="Input.Enterprise" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label asp-for="Input.Email"></label>
+                        <input asp-for="Input.Email" class="form-control" />
+                        <span asp-validation-for="Input.Email" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Input.City"></label>
+                        <input asp-for="Input.City" class="form-control" />
+                        <span asp-validation-for="Input.City" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Input.Country"></label>
+                        <input asp-for="Input.Country" class="form-control" />
+                        <span asp-validation-for="Input.Country" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Input.Sex"></label>
+                        <select asp-for="Input.Sex" asp-items="Model.SexSelectList" class="select-input"></select>
+                        <span asp-validation-for="Input.Sex" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Input.Password"></label>
+                        <input asp-for="Input.Password" class="form-control" />
+                        <span asp-validation-for="Input.Password" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Input.ConfirmPassword"></label>
+                        <input asp-for="Input.ConfirmPassword" class="form-control" />
+                        <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <label asp-for="Input.PhoneNumber"></label>
+                        <input asp-for="Input.PhoneNumber" class="form-control" />
+                        <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label asp-for="Input.DateOfBirth"></label>
+                        <input asp-for="Input.DateOfBirth" class="form-control" />
+                        <span asp-validation-for="Input.DateOfBirth" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <button type="button" style="display: block; padding: 30px; width: 100%; border-radius:12px"
+                                data-bs-toggle="modal" data-bs-target="#preferencesModal"
+                                class="btn btn-primary">
+                            Choose your areas of expertise
+                        </button>
+                    </div>
+                </div>
+                <div class="modal fade" id="preferencesModal" tabindex="-1" aria-labelledby="preferencesModal" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-sm modal-dialog-scrollable">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="preferencesModalLabel">Choose your areas of expertise</h5>
+                                <button type="button" class=" btn btn-danger" data-bs-dismiss="modal" aria-label="Close">🗙</button>
+                            </div>
+                            <div class="modal-body" style="padding: 10px; background-color:#F5F7FB">
+                                <div class="form-check">
+                                    <input asp-for="Input.Commerce" class="form-check-input" />
+                                    <label class="form-check-label" asp-for="Input.Commerce"></label>
+                                    <span class="text-danger" asp-validation-for="Input.Commerce"></span>
+                                </div>
+                                <div class="form-check">
+                                    <input asp-for="Input.Agriculture" class="form-check-input" />
+                                    <label class="form-check-label" asp-for="Input.Agriculture"></label>
+                                    <span class="text-danger" asp-validation-for="Input.Agriculture"></span>
+                                </div>
+                                <div class="form-check">
+                                    <input asp-for="Input.Peche" class="form-check-input" />
+                                    <label class="form-check-label" asp-for="Input.Peche"></label>
+                                    <span class="text-danger" asp-validation-for="Input.Peche"></span>
+                                </div>
+                                <div class="form-check">
+                                    <input asp-for="Input.Mine" class="form-check-input" />
+                                    <label class="form-check-label" asp-for="Input.Mine"></label>
+                                    <span class="text-danger" asp-validation-for="Input.Mine"></span>
+                                </div>
+                                <div class="form-check">
+                                    <input asp-for="Input.Marketing" class="form-check-input" />
+                                    <label class="form-check-label" asp-for="Input.Marketing"></label>
+                                    <span class="text-danger" asp-validation-for="Input.Marketing"></span>
+                                </div>
+                                <div class="form-check">
+                                    <input asp-for="Input.Finance" class="form-check-input" />
+                                    <label class="form-check-label" asp-for="Input.Finance"></label>
+                                    <span class="text-danger" asp-validation-for="Input.Finance"></span>
+                                </div>
+                                <div class="form-check">
+                                    <input asp-for="Input.ECommerce" class="form-check-input" />
+                                    <label class="form-check-label" asp-for="Input.ECommerce"></label>
+                                    <span class="text-danger" asp-validation-for="Input.ECommerce"></span>
+                                </div>
+                                <div class="form-check">
+                                    <input asp-for="Input.Informatique" class="form-check-input" />
+                                    <label class="form-check-label" asp-for="Input.Informatique"></label>
+                                    <span class="text-danger" asp-validation-for="Input.Informatique"></span>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button data-bs-dismiss="modal" class="btn btn-primary">Terminer</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <label asp-for="Input.Biography"></label>
+                        <textarea asp-for="Input.Biography" class="form-control"></textarea>
+                        <span asp-validation-for="Input.Biography" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <button type="submit" class="btn btn-primary">Register</button>
+                </div>
+            </div>
+            <br />
+        </form>
+
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

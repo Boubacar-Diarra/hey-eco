@@ -1,0 +1,242 @@
+﻿@inject IJSRuntime Js
+@inject ISnackbar Snackbar
+@using System.Text.RegularExpressions
+@using System.ComponentModel.DataAnnotations
+@using System.IO
+@using System.Threading
+@using Microsoft.AspNetCore.Identity
+@using Web.Models
+@using Web.Services
+@inject SignInManager<User> SignInManager
+@inject IOfferDataService OfferDataService
+@inject NavigationManager NavigationManager
+@inject IJSRuntime JSRuntime
+
+<MudDialog Style="background-color: #F5F7FB; border-radius: 12px">
+    <DialogContent>
+        <MudContainer Style="max-height:70vh; overflow-y: scroll;">
+            <MudPaper Class="add-offer-card">
+                <div id="map"></div>
+            </MudPaper>
+            <br />
+            <MudForm @ref="form" @bind-Errors="errors" @bind-IsValid="success">
+                <MudCard Class="add-offer-card">
+                    <MudCardContent>
+                        <MudDatePicker DisableToolbar="true" @bind-Date="startDate" Label="Date de début" Required="true" RequiredError="La date de début est obligatoire" />
+                    </MudCardContent>
+                </MudCard>
+                <br />
+                <MudCard Class="add-offer-card">
+                    <MudCardContent>
+                        <MudDatePicker DisableToolbar="true" @bind-Date="endDate" Label="Date de fin" Required="true" RequiredError="La date de fin est obligatoire" />
+                    </MudCardContent>
+                </MudCard>
+                <br />
+                <MudCard Class="add-offer-card">
+                    <MudCardContent>
+                        <MudSelect @bind-Value="offer.Category" RequiredError="Une catégorie doit être choisit" Required="true" T="string" Label="Catégorie">
+                            <MudSelectItem Value="@("Commerce")" />
+                            <MudSelectItem Value="@("Agriculture")" />
+                            <MudSelectItem Value="@("Peche")" />
+                            <MudSelectItem Value="@("Mine")" />
+                            <MudSelectItem Value="@("Marketing")" />
+                            <MudSelectItem Value="@("Finance")" />
+                            <MudSelectItem Value="@("ECommerce")" />
+                            <MudSelectItem Value="@("Informatique")" />
+                        </MudSelect>
+                    </MudCardContent>
+                </MudCard>
+                <br />
+                <MudCard Class="add-offer-card">
+                    <MudCardContent>
+                        <MudSelect @bind-Value="offer.Type" RequiredError="Un type doit être choisit" Required="true" T="string" Label="Type">
+                            <MudSelectItem Value="@("JobOffer")" />
+                            <MudSelectItem Value="@("Merchandise")" />
+                        </MudSelect>
+                    </MudCardContent>
+                </MudCard>
+                <br />
+                <MudCard Class="add-offer-card">
+                    <MudCardContent>
+                        <MudTextField Lines="5" @bind-Value="offer.TextContent" T="string" Required="true" Label="Contenu" />
+                    </MudCardContent>
+                </MudCard>
+                <br />
+                <MudCard Class="add-offer-card">
+                    <MudCardContent>
+                        <MudIconButton for="fileUpload" HtmlTag="label" Icon="@Icons.Material.Rounded.Image" />
+                        <InputFile id="fileUpload" OnChange="UploadFile" multiple hidden />
+                    </MudCardContent>
+                </MudCard>
+                @if (_loadingImage)
+                {
+                    <br />
+                    <MudProgressLinear Color="Color.Primary" Indeterminate="true" />
+                }
+                @foreach (var imageDataUrl in _imageDataUrls)
+                {
+                    _loadingImage = false;
+                    <br />
+                    <MudPaper>
+                        <img style="width:100%; padding:5px; border-radius: 8px" alt="_legend" src="@imageDataUrl" />
+                    </MudPaper>
+                }
+            </MudForm>
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+        </MudContainer>
+        <MudExpansionPanels Class="add-offer-card">
+            <MudExpansionPanel Text="@($"Voir les erreurs ({errors.Length})")">
+                @foreach (var error in errors)
+                {
+                    <MudText Color="Color.Error">@error</MudText>
+                }
+            </MudExpansionPanel>
+        </MudExpansionPanels>
+    </DialogContent>
+    <DialogActions>
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@(()=> form.Validate() )">Valider les données saisies</MudButton>
+        <MudButton Variant="Variant.Filled" Disabled="@(!success)" Color="Color.Secondary" OnClick="Add">Publier</MudButton>
+    </DialogActions>
+</MudDialog>
+
+<MudOverlay @bind-Visible="displayOverlay" DarkBackground="true" AutoClose="false">
+    <MudProgressCircular Color="Color.Secondary" Size="Size.Medium" Indeterminate="true" />
+</MudOverlay>
+
+@code{
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    private bool success;
+    private bool _loadingImage = false;
+    private string[] errors = { };
+    private MudForm form;
+    private DateTime? startDate;
+    private DateTime? endDate;
+    private List<IBrowserFile> files = new List<IBrowserFile>();
+    long _maxAllowSize = 2000000L;
+    long _maxAllowFile = 1;
+    private List<string> _imageDataUrls = new List<string>();
+    private bool displayOverlay = false;
+
+    private Web.Models.Offer offer = new Web.Models.Offer
+    {
+        EndDate = DateTime.Now,
+        StartDate = DateTime.Now
+    };
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await Js.InvokeVoidAsync("createMap");
+
+        await base.OnAfterRenderAsync(firstRender);
+    }
+
+
+    private async Task UploadFile(InputFileChangeEventArgs eventArgs)
+    {
+        Snackbar.Configuration.PositionClass = Defaults.Classes.Position.TopCenter;
+        Snackbar.Configuration.VisibleStateDuration = 2000;
+        Snackbar.Configuration.HideTransitionDuration = 500;
+        Snackbar.Configuration.VisibleStateDuration = 500;
+        _loadingImage = true;
+        _imageDataUrls = new List<string>();
+        files = new List<IBrowserFile>();
+        const string format = "image/png";
+        if (eventArgs.GetMultipleFiles().Count > _maxAllowFile)
+        {
+            Snackbar.Add($"Le nombre de fichier autorisé est: {_maxAllowFile}", Severity.Error);
+            return;
+        }
+        foreach (var file in eventArgs.GetMultipleFiles())
+        {
+            if (file.Size > _maxAllowSize)
+            {
+                Snackbar.Add("La taille maximun autroisé est: 2Mo", Severity.Error);
+            }
+            files.Add(file);
+            var buffer = new byte[file.Size];
+            await file.OpenReadStream(maxAllowedSize: _maxAllowSize).ReadAsync(buffer);
+            var imgDataUrl = $"data:{format};base64,{Convert.ToBase64String(buffer)}";
+            _imageDataUrls.Add(imgDataUrl);
+        }
+    }
+
+    public void OpenOverlay()
+    {
+        displayOverlay = true;
+        StateHasChanged();
+    }
+
+    public void HideOverlay()
+    {
+        displayOverlay = false;
+        StateHasChanged();
+    }
+    private async void Add()
+    {
+        OpenOverlay();
+        Snackbar.Configuration.PositionClass = Defaults.Classes.Position.TopCenter;
+        Snackbar.Configuration.VisibleStateDuration = 2000;
+        Snackbar.Configuration.HideTransitionDuration = 500;
+        Snackbar.Configuration.VisibleStateDuration = 500;
+
+
+        var user = await SignInManager.UserManager.GetUserAsync(SignInManager.Context.User);
+
+        var latlng = await JSRuntime.InvokeAsync<double[]>("getLatLng");
+        if (latlng == null || latlng.Length == 0)
+        {
+            Snackbar.Add("Les coordonnées géographiques sont obligatoires", Severity.Error);
+            return;
+        }
+
+        offer.Author = user.Id;
+        offer.PublishDate = DateTime.Now;
+        offer.StartDate = startDate.Value;
+        offer.EndDate = endDate.Value;
+        offer.Latitude = latlng[0];
+        offer.Longitude = latlng[1];
+
+        if(files != null && files.Count > 0)
+        {
+            foreach (var img in files)
+            {
+                try
+                {
+                    var extention = img.ContentType.Contains("png") ? "png" : "jpg";
+                    var filename = Path.ChangeExtension(Path.GetRandomFileName(), extention);
+                    var path = $".\\wwwroot\\img\\{filename}";
+                    Stream stream = img.OpenReadStream(maxAllowedSize: _maxAllowSize);
+                    FileStream fileStream = File.Create(path);
+                    await stream.CopyToAsync(fileStream);
+                    stream.Close();
+                    fileStream.Close();
+                    offer.ImageUrl1 = $"/img/{filename}";
+                }
+                catch (Exception e)
+                {
+                    Snackbar.Add(e.Message, Severity.Error);
+                    Console.WriteLine(e);
+                    HideOverlay();
+                    return;
+                }
+            }
+        }
+
+
+        var result = OfferDataService.SaveWithResult(offer);
+        if (result)
+        {
+            NavigationManager.NavigateTo("/my-offers");
+        }
+        else
+        {
+            Snackbar.Add("Une erreur c'est produite", Severity.Error);
+        }
+    }
+}

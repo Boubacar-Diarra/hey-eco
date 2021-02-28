@@ -1,0 +1,45 @@
+﻿@inject IDialogService DialogService
+
+<MudAppBar Class="header"  >
+    <MudText Color="Color.Primary" Style="padding-left: 20px;" Class="parisienne-font" Typo="Typo.h5" Align="Align.Center"><a href="/home" style="color: inherit">Hey-Eco</a></MudText>
+    <MudAppBarSpacer />
+    <MudLink Href="/" ><MudIconButton Color="Color.Primary" Icon="@Icons.Material.Rounded.Home" /></MudLink>
+    <MudIconButton OnClick="OpenSearchDialog" Color="Color.Primary" Icon="@Icons.Material.Rounded.Search" />
+    <MudIconButton Color="Color.Primary" Icon="@Icons.Material.Rounded.Menu" OnClick="@Drawer" />
+</MudAppBar>
+<MudDrawer Variant="@DrawerVariant.Temporary" @bind-Open="_open">
+    <MudDrawerHeader Style="background-color: #153093; color:whitesmoke">
+        <MudText Class="parisienne-font" Typo="Typo.h4" Align="Align.Center">Hey-Eco</MudText>
+    </MudDrawerHeader>
+    <MudNavMenu>
+        <MudNavLink Href="/home">Accueil</MudNavLink>
+        <MudNavLink Href="/my-offers">Mes offres</MudNavLink>
+        <MudNavLink Href="#">Mes demandes</MudNavLink>
+        <MudNavLink Href="/Identity/Account/Manage">Mon compte</MudNavLink>
+        <MudNavLink Href="/Identity/Account/LogOut">Logout</MudNavLink>
+    </MudNavMenu>
+</MudDrawer>
+
+<MudThemeProvider Theme="WithTheme" />
+
+@code{
+    private bool _open = false;
+
+    private MudTheme WithTheme = new MudTheme()
+    {
+        Palette = new Palette
+        {
+            Primary = "#153093"
+        }
+    };
+
+    private void Drawer()
+    {
+        _open = !_open;
+    }
+
+    private void OpenSearchDialog()
+    {
+        DialogService.Show<SearchDialog>("");
+    }
+}

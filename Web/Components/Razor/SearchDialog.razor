@@ -1,0 +1,17 @@
+﻿<MudDialog >
+    <DialogContent>
+        <MudContainer>
+            <br />
+            <MudCardContent Class="add-offer-card">
+                <MudTextField Variant="Variant.Outlined" T="string" Label="Search" />
+            </MudCardContent>
+        </MudContainer>
+    </DialogContent>
+    <DialogActions>
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" >Chercher</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code{
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+}
