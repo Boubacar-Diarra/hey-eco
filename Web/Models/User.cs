@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Web.Models
 {
@@ -26,6 +27,18 @@ namespace Web.Models
         public DateTime DateOfBirth { get; set; }
         public List<AreasOfExpertise> AreasOfExpertise { get; set; } = new List<AreasOfExpertise>();
         public List<Offer> Offers { get; set; } = new List<Offer>();
+        [NotMapped]
+        public static readonly List<string> AreasOfExpertiseString = new List<string>
+        {
+            "Commerce",
+            "Agriculture",
+            "Peche",
+            "Mine",
+            "Marketing",
+            "Finance",
+            "ECommerce",
+            "Informatique"
+        };
     }
 
     public enum Sex { M, F }

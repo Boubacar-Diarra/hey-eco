@@ -1,23 +1,114 @@
-﻿<MudCard Class="offer-content">
-    <MudCardHeader>
-        <CardHeaderAvatar>
-            <MudSkeleton Width="50px" Height="50px" SkeletonType="SkeletonType.Circle" />
-        </CardHeaderAvatar>
-    </MudCardHeader>
-    <MudSkeleton SkeletonType="SkeletonType.Rectangle" Height="300px" />
-    <MudCardContent>
-        <MudSkeleton SkeletonType="SkeletonType.Text" />
-        <MudSkeleton SkeletonType="SkeletonType.Text" />
-        <MudSkeleton SkeletonType="SkeletonType.Text" />
-    </MudCardContent>
-    <MudCardActions>
-        <MudSkeleton Width="64px" Height="40px" Class="ml-2" />
-        <MudSkeleton Width="105px" Height="40px" Class="ml-3" />
-    </MudCardActions>
-</MudCard>
+﻿@using Web.Services
+@using Web.Models
+@inject IUserDataService UserDataService
+@inject IDialogService DialogService
+@inject ISnackbar Snackbar
+@inject IOfferDataService OfferDataService
+@if (Author != null)
+{
+    @if (!string.IsNullOrEmpty(Offre.ImageUrl1))
+    {
+        <div style="display: @displayNone" id="div-1-@Offre.Id">
+            <MudCard Class="offer-content">
+                <MudCardHeader>
+                    <CardHeaderAvatar>
+                        <MudAvatar Color="Color.Primary">
+                            @Author.FirstName[0]@Author.Name[0]
+                        </MudAvatar>
+                        <span class="ml-2" style="font-size: 0.7em; color:#153093">Valable du @Offre.StartDate.ToShortDateString() au @Offre.EndDate.ToShortDateString()</span>
+                    </CardHeaderAvatar>
+                </MudCardHeader>
+                <MudCardContent>
+                    <p>@Offre.TextContent</p>
+                </MudCardContent>
+                <div>
+                    <img @onclick="ZoomImage" @onload="OnImageLoad" alt="offer-@Offre.Id" src="@Offre.ImageUrl1" style=" width:100%; cursor: zoom-in" />
+                </div>
+                <MudCardActions>
+                    <MudButton Disabled="disbaleInterestButton" OnClick="Interested" Class="ml-2 mb-2" Variant="Variant.Filled" Color="Color.Primary">Intéressé.e</MudButton>
+                </MudCardActions>
+            </MudCard>
+        </div>
+        <div style="display: @displayBlock">
+            <OfferPlaceholder />
+        </div>
+    }
+    else
+    {
+    <MudCard Class="offer-content">
+        <MudCardHeader>
+            <CardHeaderAvatar>
+                <MudAvatar Color="Color.Primary">
+                    @Author.FirstName[0]@Author.Name[0]
+                </MudAvatar>
+                <span class="ml-2" style="font-size: 0.7em; color:#153093">Valable du @Offre.StartDate.ToShortDateString() au @Offre.EndDate.ToShortDateString()</span>
+            </CardHeaderAvatar>
+        </MudCardHeader>
+        <MudCardContent>
+            <p>@Offre.TextContent</p>
+        </MudCardContent>
+        <MudCardActions>
+            <MudButton Disabled="disbaleInterestButton" OnClick="Interested" Class="ml-2 mb-2" Variant="Variant.Filled" Color="Color.Primary">Intéressé.e</MudButton>
+        </MudCardActions>
+    </MudCard>
+    }
+}
+else
+{
+    <MudProgressLinear Indeterminate="true" Color="Color.Primary"/>
+}
+
 <br />
 
 @code{
+    [Parameter] public Web.Models.Offer Offre { get; set; }
+    [Parameter] public User CurrentUser { get; set; }
+    private string displayNone = "none";
+    private string displayBlock = "block";
+    private User Author;
+    private bool disbaleInterestButton = false;
 
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        Author = UserDataService.GetUser(Offre.Author);
+    }
+
+    private void OnImageLoad()
+    {
+        displayBlock = "none";
+        displayNone = "block";
+        StateHasChanged();
+    }
+
+    private void ZoomImage()
+    {
+        var parameters = new DialogParameters { ["ImageUrl"] = Offre.ImageUrl1 };
+        var fullScreenOptions = new DialogOptions() { FullScreen = true, CloseButton = true };
+
+        DialogService.Show<ShowImageDialog>("", parameters: parameters, options: fullScreenOptions);
+
+    }
+
+    private void Interested()
+    {
+        Snackbar.Configuration.PositionClass = Defaults.Classes.Position.TopCenter;
+        Snackbar.Configuration.VisibleStateDuration = 2000;
+        Snackbar.Configuration.HideTransitionDuration = 500;
+        Snackbar.Configuration.VisibleStateDuration = 500;
+
+        disbaleInterestButton = true;
+        var result = OfferDataService.AddAppliant(Offre, CurrentUser);
+        if (!result)
+        {
+            Snackbar.Add("Une erreur c'est produite. Veuillez recommencer", Severity.Info);
+            disbaleInterestButton = false;
+        }
+        else
+        {
+            Snackbar.Add("Votre demande a été envoyé avec succès!", Severity.Info);
+        }
+        StateHasChanged();
+    }
 }
 

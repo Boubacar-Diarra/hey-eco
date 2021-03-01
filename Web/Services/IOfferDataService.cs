@@ -15,11 +15,13 @@ namespace Web.Services
         Task<List<Offer>> GetOffersByUser(string userId, int startIndex, int count);
         Task<List<Offer>> GetOffersByType(string type);
         Task<List<Offer>> GetOffersByCategory(string category);
+        Task<List<Offer>> GetOffersForHome(User user, int startIndex, int count);
         Task<List<Offer>> GetOffersByPublishDateInterval(DateTime start, DateTime end);
         void UpdateOffer(long id, Offer offer);
         void UpdateOffer(Offer offer);
         void DeleteOffer(long id);
         void Save(Offer offer);
         bool SaveWithResult(Offer offer);
+        bool AddAppliant(Offer offer, User applciant);
     }
 }
