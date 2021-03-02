@@ -6,7 +6,7 @@ using Web.Models;
 
 namespace Web.Services
 {
-    interface IOfferDataService
+    public interface IOfferDataService
     {
         Task<Offer> GetOffer(long id);
         Task<Offer> GetOffer(Offer offer);
@@ -22,7 +22,8 @@ namespace Web.Services
         void DeleteOffer(long id);
         void Save(Offer offer);
         bool SaveWithResult(Offer offer);
-        bool AddAppliant(Offer offer, User applciant);
-        bool RemoveAppliant(Offer offer, User applciant);
+        bool AddApplicant(Offer offer, Applicant applciant);
+        bool RemoveApplicant(Offer offer, Applicant applciant);
+        bool AcceptApplicant(Offer offer, Applicant applciant);
     }
 }

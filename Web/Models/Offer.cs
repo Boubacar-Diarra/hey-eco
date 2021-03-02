@@ -1,13 +1,25 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+
 namespace Web.Models
 {
     public class Offer
     {
+        private readonly ILazyLoader _lazyLoader;
+        public Offer(ILazyLoader lazyLoader) { _lazyLoader = lazyLoader; }
+
+        public Offer() { }
         public long Id { get; set; }
         public string Author { get; set; }
-        public List<User> Applicants { get; set; } = new List<User>();
+        private List<Applicant> _applicants;
+
+        public List<Applicant> Applicants
+        {
+            get => _lazyLoader.Load(this, ref _applicants);
+            set => _applicants = value;
+        }
         public string TextContent { get; set; }
         public string VideoUrl { get; set; }
         public string ImageUrl1 { get; set; }
@@ -36,5 +48,30 @@ namespace Web.Models
     {
         JobOffer,
         Merchandise
+    }
+
+    public class Applicant
+    {
+        private readonly ILazyLoader _lazyLoader;
+        public Applicant() { }
+        public Applicant(ILazyLoader lazyLoader) { _lazyLoader = lazyLoader; }
+        
+        public long Id { get; set; }
+        private User _user;
+        public User User
+        {
+            get => _lazyLoader.Load(this, ref _user);
+            set => _user = value;
+        }
+
+        private Offer _offer;
+
+        public Offer Offer
+        {
+            get => _lazyLoader.Load(this, ref _offer);
+            set => _offer = value;
+        }
+        public bool IsAccepted { get; set; } = false;
+        public DateTime DateOfRequest { get; set; }
     }
 }

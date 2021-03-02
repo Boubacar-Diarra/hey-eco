@@ -26,7 +26,7 @@
         <p>@offer.TextContent</p>
         <br />
         <MudDivider />
-        @if (offer.Applicants.Count > 0)
+        @if (offer.Applicants != null && offer.Applicants.Count > 0)
         {
             <MudList Dense="true" Clickable="true">
                 <MudListSubheader>
@@ -34,11 +34,11 @@
                 </MudListSubheader>
                 @foreach (var applicant in offer.Applicants)
                 {
-                    <MudListItem Dense="true">
+                    <MudListItem Disabled="@applicant.IsAccepted" Dense="true">
                         <p style="font-size: 0.8em" class="varela-round-font">
-                            @applicant.FirstName @applicant.Name
-                            <MudIconButton OnClick="() => ApprouveDemande(offer, applicant)" Color="Color.Success" Class="ml-5" Icon="@Icons.Material.Rounded.Verified" />
-                            <MudIconButton OnClick="() => RemoveDemande(offer, applicant)" Color="Color.Error" Class="ml-2" Icon="@Icons.Material.Rounded.Remove" />
+                            @applicant.User.FirstName @applicant.User.Name
+                            <MudIconButton OnClick="() => AcceptRequest(offer, applicant)" Color="Color.Success" Class="ml-5" Icon="@Icons.Material.Rounded.Verified" />
+                            <MudIconButton OnClick="() => RemoveRequest(offer, applicant)" Color="Color.Error" Class="ml-2" Icon="@Icons.Material.Rounded.Remove" />
                         </p>
                     </MudListItem>
                 }
@@ -60,7 +60,6 @@
 
 @code {
     [Parameter] public Web.Models.Offer offer { get; set; }
-    //[Parameter] public User user { get; set; }
 
     private async Task DeleteOffer(long offerId, string fileName)
     {
@@ -74,16 +73,15 @@
                 File.Delete($".\\wwwroot\\{fileName}");
             OfferDataService.DeleteOffer(offerId);
             Snackbar.Configuration.PositionClass = Defaults.Classes.Position.TopCenter;
-            //Snackbar.Add("Offre supprimée avec succès", Severity.Success);
             NavigationManager.NavigateTo("/my-offers", true);
         }
     }
 
-    private void RemoveDemande(Web.Models.Offer offer, User user)
+    private void RemoveRequest(Web.Models.Offer offer, Applicant applicant)
     {
         Snackbar.Configuration.PositionClass = Defaults.Classes.Position.TopCenter;
         Snackbar.Configuration.VisibleStateDuration = 2000;
-        var result = OfferDataService.RemoveAppliant(offer, user);
+        var result = OfferDataService.RemoveApplicant(offer, applicant);
         if (result)
         {
             Snackbar.Add("Opération effectuée avec succès", Severity.Success);
@@ -94,13 +92,13 @@
             Snackbar.Add("Une erreur c'est produite", Severity.Success);
         }
     }
-    private async void ApprouveDemande(Web.Models.Offer offer, User user)
+    private async void AcceptRequest(Web.Models.Offer offer, Applicant applicant)
     {
         Snackbar.Configuration.PositionClass = Defaults.Classes.Position.TopCenter;
         Snackbar.Configuration.VisibleStateDuration = 2000;
         try
         {
-            var result = OfferDataService.RemoveAppliant(offer, user);
+            var result = OfferDataService.AcceptApplicant(offer, applicant);
             if (!result)
             {
                 throw new Exception();
@@ -108,8 +106,9 @@
             var message = "<h3 style=\"color:#355075\">Félicitation, votre demande a été acceptée!</h3>" +
             "Rendez-vous sur <a href=\"https://www.hey-eco.net\">hey-eco.net</a>, dans la section \"Mes demandes\" pour plus de détails"
             ;
-            await EmailSender.SendEmailAsync(user.Email, "Demande accepté", message);
+            await EmailSender.SendEmailAsync(applicant.User.Email, "Demande acceptée", message);
             Snackbar.Add("Opération effectuée avec succès", Severity.Success);
+            StateHasChanged();
         }
         catch (Exception)
         {

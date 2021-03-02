@@ -105,7 +105,15 @@ else
         Snackbar.Configuration.VisibleStateDuration = 500;
 
         disbaleInterestButton = true;
-        var result = OfferDataService.AddAppliant(Offre, CurrentUser);
+        var offer = Offre;
+        var applicant = new Applicant
+        {
+            User = CurrentUser,
+            DateOfRequest = DateTime.Now,
+            IsAccepted = false,
+            Offer = offer
+        };
+        var result = OfferDataService.AddApplicant(Offre, applicant);
         if (!result)
         {
             Snackbar.Add("Une erreur c'est produite. Veuillez recommencer", Severity.Info);

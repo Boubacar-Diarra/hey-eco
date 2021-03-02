@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Web.Data;
 
 namespace Web.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210302103206_AddApplicantClass")]
+    partial class AddApplicantClass
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -412,15 +414,13 @@ namespace Web.Data.Migrations
 
             modelBuilder.Entity("Web.Models.Applicant", b =>
                 {
-                    b.HasOne("Web.Models.Offer", "Offer")
+                    b.HasOne("Web.Models.Offer", null)
                         .WithMany("Applicants")
                         .HasForeignKey("OfferId");
 
                     b.HasOne("Web.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
-
-                    b.Navigation("Offer");
 
                     b.Navigation("User");
                 });

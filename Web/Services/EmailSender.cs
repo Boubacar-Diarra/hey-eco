@@ -14,13 +14,11 @@ namespace Web.Services
     {
         public async Task SendEmailAsync(string email, string subject, string htmlMessage)
         {
-            Console.WriteLine("sender");
             await Execute(subject, htmlMessage, email);
         }
 
         private static async Task Execute(string subject, string message, string email)
         {
-            Console.WriteLine("begin");
             var client = new MailjetClient("afd962e5cab08346e3ab9e9105b0cc4f", "e19c0a9da1a0a3f92464e9a60fbb6e4c")
             {
                 Version = ApiVersion.V3_1

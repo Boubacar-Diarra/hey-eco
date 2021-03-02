@@ -13,6 +13,8 @@ namespace Web.Data
         {
         }
 
+
         public DbSet<Offer> Offers { get; set; }
+        public DbSet<Applicant> Applicants { get; set; }
     }
 }

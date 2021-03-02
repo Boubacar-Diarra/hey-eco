@@ -6,7 +6,7 @@ using Web.Models;
 
 namespace Web.Services
 {
-    interface IUserDataService
+    public interface IUserDataService
     {
         User GetUser(string author);
     }

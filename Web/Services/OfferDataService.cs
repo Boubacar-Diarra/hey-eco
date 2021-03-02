@@ -66,7 +66,7 @@ namespace Web.Services
 
         public async void Save(Offer offer)
         {
-            _dbContext.Offers.Add(offer);
+            await _dbContext.Offers.AddAsync(offer);
             await _dbContext.SaveChangesAsync();
         }
 
@@ -80,7 +80,10 @@ namespace Web.Services
         public Task<List<Offer>> GetOffersByUser(string userId, int startIndex, int count)
         {
             return Task.FromResult(
-                _dbContext.Offers.Include(o => o.Applicants).Where(o => o.Author == userId).OrderByDescending(o => o.PublishDate).Skip(startIndex).Take(count).ToList()
+                _dbContext.Offers
+                    .Where(o => o.Author == userId)
+                    .OrderByDescending(o => o.PublishDate).
+                    Skip(startIndex).Take(count).ToList()
                 );
         }
 
@@ -102,32 +105,31 @@ namespace Web.Services
         public Task<List<Offer>> GetOffersForHome(User user, int startIndex, int count)
         {
             var byUserPreference = _dbContext.Offers
-                .Include(o => o.Applicants)
                 .Where(o => User.AreasOfExpertiseString.Contains(o.Category))
-                .Where(o => o.Applicants.All(u => u.Id != user.Id))
+                .Where(o => o.Applicants.All(a => a.User.Id != user.Id))
                 .Where(o => o.Author != user.Id)
                 .OrderByDescending(o => o.PublishDate)
                 .Skip(startIndex).Take(count).ToList();
-            if(byUserPreference != null && byUserPreference.Count > 0)
+            if(byUserPreference.Count > 0)
             {
                 return Task.FromResult(byUserPreference);
             }
             return Task.FromResult(
                 _dbContext.Offers
-                    .Include(o => o.Applicants)
                     .Where(o => o.Author != user.Id)
-                    .Where(o => o.Applicants.All(u => u.Id != user.Id))
+                    .Where(o => o.Applicants.All(a => a.User.Id != user.Id))
                     .OrderByDescending(o => o.PublishDate)
                     .Skip(startIndex).Take(count).ToList()
                 );
         }
 
-        public bool AddAppliant(Offer offer, User applicant)
+        public bool AddApplicant(Offer offer, Applicant applicant)
         {
             try
             {
                 _dbContext.Entry(offer).State = EntityState.Modified;
-                _dbContext.Entry(applicant).State = EntityState.Modified;
+                _dbContext.Entry(applicant.User).State = EntityState.Modified;
+                offer.Applicants ??= new List<Applicant>();
                 offer.Applicants.Add(applicant);
                 _dbContext.SaveChanges();
                 return true;
@@ -139,12 +141,28 @@ namespace Web.Services
             }
         }
 
-        public bool RemoveAppliant(Offer offer, User applciant)
+        public bool RemoveApplicant(Offer offer, Applicant applciant)
         {
             try
             {
                 offer.Applicants.Remove(applciant);
                 _dbContext.Offers.Update(offer);
+                _dbContext.SaveChanges();
+                return true;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return false;
+            }
+        }
+
+        public bool AcceptApplicant(Offer offer, Applicant applciant)
+        {
+            try
+            {
+                applciant.IsAccepted = true;
+                _dbContext.Applicants.Update(applciant);
                 _dbContext.SaveChanges();
                 return true;
             }

@@ -55,6 +55,7 @@ namespace Web
             //add of my own services
             services.AddScoped<IOfferDataService, OfferDataService>();
             services.AddScoped<IUserDataService, UserDataService>();
+            services.AddScoped<IApplicantDataService, ApplicantDataService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -1,5 +1,28 @@
-﻿<h3>MyDemande</h3>
+﻿@using Web.Models
+<MudCard Class="add-offer-card">
+    <MudCardContent>
+        <p style="font-size: 0.8em">Date de candidature: @applicant.DateOfRequest.ToShortDateString()</p>
+        <p style="font-size: 0.8em">Type: @applicant.Offer.Type</p>
+        <p style="font-size: 0.8em">catégorie: @applicant.Offer.Category</p>
+        @if (applicant.IsAccepted)
+        {
+            <MudAlert Class="mt-2" Dense="true" Variant="Variant.Filled" Severity="Severity.Success">
+                Félicitation demande Acceptée 🎉🎊🎉! <br/>
+                Vous devez vous abonné.e pour pouvoir entrer en contact avec l'offreur. <br/>
+                <a style="color: #4366e4; text-decoration: underline" href="#">Par ici pour s'abonner</a>
+            </MudAlert>
+        }
+        else
+        {
+            <MudAlert Class="mt-2" Dense="true" Variant="Variant.Filled" Severity="Severity.Warning">
+                Cette demande est en cours de traitement.
+            </MudAlert>
+        }
+    </MudCardContent>
+</MudCard>
+<br/>
+@code{
 
-@code {
+    [Parameter] public Applicant applicant { get; set; }
 
 }
