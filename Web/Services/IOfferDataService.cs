@@ -23,5 +23,6 @@ namespace Web.Services
         void Save(Offer offer);
         bool SaveWithResult(Offer offer);
         bool AddAppliant(Offer offer, User applciant);
+        bool RemoveAppliant(Offer offer, User applciant);
     }
 }

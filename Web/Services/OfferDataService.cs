@@ -138,5 +138,21 @@ namespace Web.Services
                 return false;
             }
         }
+
+        public bool RemoveAppliant(Offer offer, User applciant)
+        {
+            try
+            {
+                offer.Applicants.Remove(applciant);
+                _dbContext.Offers.Update(offer);
+                _dbContext.SaveChanges();
+                return true;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return false;
+            }
+        }
     }
 }

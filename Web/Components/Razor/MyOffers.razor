@@ -25,43 +25,7 @@
                 <MudGrid >
                     <MudItem xs="12" sm="2"></MudItem>
                     <MudItem sm="6" xs="12">
-                        <MudCard Class="offer-content">
-                            <MudCardHeader>
-                                <CardHeaderContent>
-                                    <MudText Class="varela-round-font" Style="font-size: 0.8em" Color="Color.Primary">Date de publication: @offer.PublishDate.ToShortDateString()</MudText>
-                                    <MudText Class="varela-round-font" Style="font-size: 0.8em" Color="Color.Primary">Type: @offer.Type</MudText>
-                                    <MudText Class="varela-round-font" Style="font-size: 0.8em" Color="Color.Primary">catégorie: @offer.Category</MudText>
-                                </CardHeaderContent>
-                            </MudCardHeader>
-                            @if (!string.IsNullOrEmpty(offer.ImageUrl1))
-                            {
-                                <img alt="offer-@offer.Id" src="@offer.ImageUrl1" style="width:100%" />
-                            }
-                            <MudCardContent >
-                                <MudText Class="varela-round-font">@offer.TextContent</MudText>
-                                <br />
-                                <MudDivider />
-                                <MudList Dense="true" Clickable="true">
-                                    <MudListSubheader>
-                                        <MudText  Class="varela-round-font" Color="Color.Primary">Liste des demandes</MudText>
-                                    </MudListSubheader>
-                                    @foreach (var applicant in offer.Applicants)
-                                    {
-                                        <MudListItem Dense="true">
-                                            <MudText Style="font-size: 0.8em" Class="varela-round-font">
-                                                @applicant.FirstName @applicant.Name
-                                                <MudIconButton Color="Color.Success" Class="ml-5" Icon="@Icons.Material.Rounded.Verified" />
-                                                <MudIconButton Color="Color.Error" Class="ml-2" Icon="@Icons.Material.Rounded.Remove" />
-                                            </MudText>
-                                        </MudListItem>
-                                    }
-                                </MudList>
-                            </MudCardContent>
-                            <MudCardActions>
-                                @*<MudIconButton Color="Color.Primary" Icon="@Icons.Material.Rounded.Update" />*@
-                                <MudIconButton OnClick="() => DeleteOffer(offer.Id, offer.ImageUrl1)" Color="Color.Error" Icon="@Icons.Material.Rounded.Delete" />
-                            </MudCardActions>
-                        </MudCard>
+                        <MyOffer offer="offer" />
                     </MudItem>
                 </MudGrid>
             </ItemContent>
@@ -106,29 +70,4 @@
         return new ItemsProviderResult<Web.Models.Offer>(offers, offers.Count);
     }
 
-    private async Task DeleteOffer(long offerId, string fileName)
-    {
-        var parameters = new DialogParameters { ["offerId"] = offerId };
-
-        var dialog = DialogService.Show<DeleteOfferDialog>("Supprimer l'offre ?", parameters);
-        var result = await dialog.Result;
-        if (!result.Cancelled)
-        {
-            if(!string.IsNullOrEmpty(fileName))
-                File.Delete($".\\wwwroot\\{fileName}");
-            OfferDataService.DeleteOffer(offerId);
-            Snackbar.Configuration.PositionClass = Defaults.Classes.Position.TopCenter;
-            //Snackbar.Add("Offre supprimée avec succès", Severity.Success);
-            NavigationManager.NavigateTo("/my-offers", true);
-        }
-    }
-
-    private void RemoveDemande(Web.Models.Offer offer, User user)
-    {
-
-    }
-    private void ApprouveDemande(Web.Models.Offer offer, User user)
-    {
-
-    }
 }

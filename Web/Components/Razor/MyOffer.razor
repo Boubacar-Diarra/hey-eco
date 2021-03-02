@@ -1,0 +1,119 @@
+﻿@using Web.Models
+@using Web.Services
+@using Microsoft.AspNetCore.Identity
+@using Web.Data
+@using System.IO
+@using Microsoft.AspNetCore.Identity.UI.Services;
+@inject IOfferDataService OfferDataService
+@inject IDialogService DialogService
+@inject ISnackbar Snackbar
+@inject NavigationManager NavigationManager
+@inject IEmailSender EmailSender
+
+<MudCard Class="offer-content">
+    <MudCardHeader>
+        <CardHeaderContent>
+            <p style="font-size: 0.8em">Date de publication: @offer.PublishDate.ToShortDateString()</p>
+            <p style="font-size: 0.8em">Type: @offer.Type</p>
+            <p style="font-size: 0.8em">catégorie: @offer.Category</p>
+        </CardHeaderContent>
+    </MudCardHeader>
+    @if (!string.IsNullOrEmpty(offer.ImageUrl1))
+    {
+        <img alt="offer-@offer.Id" src="@offer.ImageUrl1" style="width:100%" />
+    }
+    <MudCardContent>
+        <p>@offer.TextContent</p>
+        <br />
+        <MudDivider />
+        @if (offer.Applicants.Count > 0)
+        {
+            <MudList Dense="true" Clickable="true">
+                <MudListSubheader>
+                    <p class="varela-round-font">Liste des demandes</p>
+                </MudListSubheader>
+                @foreach (var applicant in offer.Applicants)
+                {
+                    <MudListItem Dense="true">
+                        <p style="font-size: 0.8em" class="varela-round-font">
+                            @applicant.FirstName @applicant.Name
+                            <MudIconButton OnClick="() => ApprouveDemande(offer, applicant)" Color="Color.Success" Class="ml-5" Icon="@Icons.Material.Rounded.Verified" />
+                            <MudIconButton OnClick="() => RemoveDemande(offer, applicant)" Color="Color.Error" Class="ml-2" Icon="@Icons.Material.Rounded.Remove" />
+                        </p>
+                    </MudListItem>
+                }
+            </MudList>
+        }
+        else
+        {
+            <br />
+            <p>Aucune candidature pour l'instant</p>
+            <br />
+        }
+        <MudDivider />
+    </MudCardContent>
+    <MudCardActions>
+        @*<MudIconButton Color="Color.Primary" Icon="@Icons.Material.Rounded.Update" />*@
+        <MudIconButton OnClick="() => DeleteOffer(offer.Id, offer.ImageUrl1)" Color="Color.Error" Icon="@Icons.Material.Rounded.Delete" />
+    </MudCardActions>
+</MudCard>
+
+@code {
+    [Parameter] public Web.Models.Offer offer { get; set; }
+    //[Parameter] public User user { get; set; }
+
+    private async Task DeleteOffer(long offerId, string fileName)
+    {
+        var parameters = new DialogParameters { ["offerId"] = offerId };
+
+        var dialog = DialogService.Show<DeleteOfferDialog>("Supprimer l'offre ?", parameters);
+        var result = await dialog.Result;
+        if (!result.Cancelled)
+        {
+            if (!string.IsNullOrEmpty(fileName))
+                File.Delete($".\\wwwroot\\{fileName}");
+            OfferDataService.DeleteOffer(offerId);
+            Snackbar.Configuration.PositionClass = Defaults.Classes.Position.TopCenter;
+            //Snackbar.Add("Offre supprimée avec succès", Severity.Success);
+            NavigationManager.NavigateTo("/my-offers", true);
+        }
+    }
+
+    private void RemoveDemande(Web.Models.Offer offer, User user)
+    {
+        Snackbar.Configuration.PositionClass = Defaults.Classes.Position.TopCenter;
+        Snackbar.Configuration.VisibleStateDuration = 2000;
+        var result = OfferDataService.RemoveAppliant(offer, user);
+        if (result)
+        {
+            Snackbar.Add("Opération effectuée avec succès", Severity.Success);
+            StateHasChanged();
+        }
+        else
+        {
+            Snackbar.Add("Une erreur c'est produite", Severity.Success);
+        }
+    }
+    private async void ApprouveDemande(Web.Models.Offer offer, User user)
+    {
+        Snackbar.Configuration.PositionClass = Defaults.Classes.Position.TopCenter;
+        Snackbar.Configuration.VisibleStateDuration = 2000;
+        try
+        {
+            var result = OfferDataService.RemoveAppliant(offer, user);
+            if (!result)
+            {
+                throw new Exception();
+            }
+            var message = "<h3 style=\"color:#355075\">Félicitation, votre demande a été acceptée!</h3>" +
+            "Rendez-vous sur <a href=\"https://www.hey-eco.net\">hey-eco.net</a>, dans la section \"Mes demandes\" pour plus de détails"
+            ;
+            await EmailSender.SendEmailAsync(user.Email, "Demande accepté", message);
+            Snackbar.Add("Opération effectuée avec succès", Severity.Success);
+        }
+        catch (Exception)
+        {
+            Snackbar.Add("Une erreur c'est produite", Severity.Success);
+        }
+    }
+}

@@ -15,8 +15,13 @@
                         <MudAvatar Color="Color.Primary">
                             @Author.FirstName[0]@Author.Name[0]
                         </MudAvatar>
-                        <span class="ml-2" style="font-size: 0.7em; color:#153093">Valable du @Offre.StartDate.ToShortDateString() au @Offre.EndDate.ToShortDateString()</span>
                     </CardHeaderAvatar>
+                    <CardHeaderContent>
+                        <p style="font-size: 0.8em; color:#153093">Valable du @Offre.StartDate.ToShortDateString() au @Offre.EndDate.ToShortDateString()</p>
+                        <p style="font-size: 0.8em; color:#153093">Date de publication: @Offre.PublishDate.ToShortDateString()</p>
+                        <p style="font-size: 0.8em; color:#153093">Type: @Offre.Type</p>
+                        <p style="font-size: 0.8em; color:#153093">catégorie: @Offre.Category</p>
+                    </CardHeaderContent>
                 </MudCardHeader>
                 <MudCardContent>
                     <p>@Offre.TextContent</p>
@@ -45,6 +50,8 @@
             </CardHeaderAvatar>
         </MudCardHeader>
         <MudCardContent>
+            <MudText Class="varela-round-font" Style="font-size: 0.8em" Color="Color.Primary">Type: @Offre.Type</MudText>
+            <MudText Class="varela-round-font" Style="font-size: 0.8em" Color="Color.Primary">catégorie: @Offre.Category</MudText>
             <p>@Offre.TextContent</p>
         </MudCardContent>
         <MudCardActions>
