@@ -60,6 +60,15 @@ namespace Web.Services
         public async void DeleteOffer(long id)
         {
             var offer = await _dbContext.Offers.FindAsync(id);
+            if (offer.Applicants != null)
+            {
+                foreach (var applicant in offer.Applicants)
+                {
+                    _dbContext.Applicants.Remove(applicant);
+                    await _dbContext.SaveChangesAsync();
+                }
+            }
+            
             _dbContext.Offers.Remove(offer);
             await _dbContext.SaveChangesAsync();
         }
@@ -147,6 +156,8 @@ namespace Web.Services
             {
                 offer.Applicants.Remove(applciant);
                 _dbContext.Offers.Update(offer);
+                _dbContext.SaveChanges();
+                _dbContext.Applicants.Remove(applciant);
                 _dbContext.SaveChanges();
                 return true;
             }

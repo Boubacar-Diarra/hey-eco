@@ -27,19 +27,12 @@ window.createMap = () => {
         if (circle != null) {
             map.removeLayer(circle)
         }
-        /* circle = L.circle(ev.latlng, {
-             color: '#0F5AAB',
-             fillColor: '#153093',
-             fillOpacity: 1,
-             radius: 500,
-         }).addTo(map);*/
         circle = L.marker(ev.latlng).addTo(map);
 
     })
     //document.getElementById("map").style.height = "300px"
 }
 window.CreateMapForPost = (mapId, lat, lng) => {
-    //alert(mapId)
     let container = L.DomUtil.get(mapId);
     if (container != null) {
         container._leaflet_id = null;
@@ -56,12 +49,7 @@ window.CreateMapForPost = (mapId, lat, lng) => {
     setTimeout(function () {
         map.invalidateSize();
     }, 1000);
-    let circle = L.circle([lat, lng], {
-        color: '#0F5AAB',
-        fillColor: '#153093',
-        fillOpacity: 0.5,
-        radius: 500
-    }).addTo(map);
+    L.marker([lat, lng]).addTo(map);
 }
 window.getLatLng = () => {
     return latlng;

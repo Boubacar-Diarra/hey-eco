@@ -31,6 +31,7 @@
                 </div>
                 <MudCardActions>
                     <MudButton Disabled="disbaleInterestButton" OnClick="Interested" Class="ml-2 mb-2" Variant="Variant.Filled" Color="Color.Primary">Intéressé.e</MudButton>
+                    <MudIconButton OnClick="OpenPosition" Class="ml-2 mb-2" Color="Color.Secondary" Icon="@Icons.Material.Rounded.Room" />
                 </MudCardActions>
             </MudCard>
         </div>
@@ -56,6 +57,7 @@
         </MudCardContent>
         <MudCardActions>
             <MudButton Disabled="disbaleInterestButton" OnClick="Interested" Class="ml-2 mb-2" Variant="Variant.Filled" Color="Color.Primary">Intéressé.e</MudButton>
+            <MudIconButton OnClick="OpenPosition" Class="ml-2 mb-2" Color="Color.Secondary" Icon="@Icons.Material.Rounded.Room" />
         </MudCardActions>
     </MudCard>
     }
@@ -124,6 +126,14 @@ else
             Snackbar.Add("Votre demande a été envoyé avec succès!", Severity.Info);
         }
         StateHasChanged();
+    }
+
+    private void OpenPosition()
+    {
+        var parameters = new DialogParameters { ["offer"] = Offre };
+        var fullScreenOptions = new DialogOptions() { FullScreen = true, CloseButton = true };
+
+        DialogService.Show<ShowLocalizationDialog>("", parameters: parameters, options: fullScreenOptions);
     }
 }
 

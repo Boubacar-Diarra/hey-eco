@@ -4,6 +4,16 @@
         <p style="font-size: 0.8em">Date de candidature: @applicant.DateOfRequest.ToShortDateString()</p>
         <p style="font-size: 0.8em">Type: @applicant.Offer.Type</p>
         <p style="font-size: 0.8em">catégorie: @applicant.Offer.Category</p>
+        <br/>
+        <MudDivider/>
+        <br/>
+        <p>@applicant.Offer.TextContent</p>
+        <br/>
+        <MudDivider/>
+        @if (!string.IsNullOrEmpty(applicant.Offer.ImageUrl1))
+        {
+            <img style="width: 100%" src="@applicant.Offer.ImageUrl1" alt="offer-@applicant.Offer.Id" />
+        }
         @if (applicant.IsAccepted)
         {
             <MudAlert Class="mt-2" Dense="true" Variant="Variant.Filled" Severity="Severity.Success">

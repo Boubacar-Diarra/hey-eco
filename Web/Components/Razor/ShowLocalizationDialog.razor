@@ -1,5 +1,22 @@
-<h3>ShowLocalizationDialog</h3>
+@inject IJSRuntime JsRuntime
+<br/>
+<br/>
+<MudDialog>
+    <DialogContent>
+        <MudContainer Style=" overflow-y: scroll;">
+            <MudPaper Class="add-offer-card">
+                <div id="mapPost"></div>
+            </MudPaper>
+        </MudContainer>
+    </DialogContent>
+</MudDialog>
 
 @code {
-    
+    [Parameter] public Web.Models.Offer offer { get; set; }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        base.OnAfterRender(firstRender);
+        JsRuntime.InvokeVoidAsync("CreateMapForPost", "mapPost", offer.Latitude, offer.Longitude);
+    }
 }
