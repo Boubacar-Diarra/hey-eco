@@ -1,0 +1,25 @@
+﻿@using Web.Models
+
+<MudDialog Style="background-color: #F5F7FB">
+    <TitleContent>Infos sur @user.FirstName @user.Name</TitleContent>
+    <DialogContent >
+        <MudCard Style="margin: 20px 0 " Class="offer-content">
+            <MudCardContent>
+                <p>Date de naissance: @user.DateOfBirth.ToShortDateString()</p>
+                <p>Activité professionel: @user.ProfessionalActivity</p>
+                <p>Domaine d'activité professionel: @user.ProfessionalActivityDomaine</p>
+                @if(!string.IsNullOrEmpty(user.Enterprise))
+                {
+                    <p>Domaine d'activité professionel: @user.ProfessionalActivityDomaine</p>
+                }
+                <p><a style="color: darkblue; cursor: pointer; text-decoration: underline" href="@user.CvUrl">CV</a></p>
+                <p>Sexe: @user.Sex</p>
+            </MudCardContent>
+        </MudCard>
+    </DialogContent>
+</MudDialog>
+
+
+@code{
+    [Parameter] public User user { get; set; }
+}

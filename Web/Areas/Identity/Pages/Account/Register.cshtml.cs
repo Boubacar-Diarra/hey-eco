@@ -45,7 +45,7 @@ namespace Web.Areas.Identity.Pages.Account
         new List<SelectListItem>
         {
             new SelectListItem {Text = "M", Value = "0"},
-            new SelectListItem {Text = "S", Value = "1"},
+            new SelectListItem {Text = "F", Value = "1"},
         }, "Value", "Text");
 
         public string ReturnUrl { get; set; }

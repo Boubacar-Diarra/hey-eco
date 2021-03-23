@@ -116,7 +116,7 @@ namespace Web.Services
             var byUserPreference = _dbContext.Offers
                 .Where(o => User.AreasOfExpertiseString.Contains(o.Category))
                 .Where(o => o.Applicants.All(a => a.User.Id != user.Id))
-                .Where(o => o.Author != user.Id)
+                //.Where(o => o.Author != user.Id)
                 .OrderByDescending(o => o.PublishDate)
                 .Skip(startIndex).Take(count).ToList();
             if(byUserPreference.Count > 0)
@@ -125,7 +125,7 @@ namespace Web.Services
             }
             return Task.FromResult(
                 _dbContext.Offers
-                    .Where(o => o.Author != user.Id)
+                    //.Where(o => o.Author != user.Id)
                     .Where(o => o.Applicants.All(a => a.User.Id != user.Id))
                     .OrderByDescending(o => o.PublishDate)
                     .Skip(startIndex).Take(count).ToList()

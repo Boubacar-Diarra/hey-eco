@@ -36,7 +36,7 @@
                 {
                     <MudListItem Disabled="@applicant.IsAccepted" Dense="true">
                         <p style="font-size: 0.8em" class="varela-round-font">
-                            @applicant.User.FirstName @applicant.User.Name
+                            <span style="color: darkblue; text-decoration: underline" @onclick="() => OnShowCandidateProfilDialog(applicant.User)">@applicant.User.FirstName @applicant.User.Name</span>
                             <MudIconButton OnClick="() => AcceptRequest(offer, applicant)" Color="Color.Success" Class="ml-5" Icon="@Icons.Material.Rounded.Verified" />
                             <MudIconButton OnClick="() => RemoveRequest(offer, applicant)" Color="Color.Error" Class="ml-2" Icon="@Icons.Material.Rounded.Remove" />
                         </p>
@@ -114,5 +114,14 @@
         {
             Snackbar.Add("Une erreur c'est produite", Severity.Success);
         }
+    }
+
+
+    private void OnShowCandidateProfilDialog(User userId)
+    {
+        //DialogOptions fullScreen = new DialogOptions() { FullScreen = true, CloseButton = true };
+        var parameters = new DialogParameters();
+        parameters.Add("user", userId);
+        DialogService.Show<ShowCandidatProfilDialog>("Show candidate infos",parameters);
     }
 }
