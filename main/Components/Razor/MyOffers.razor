@@ -1,0 +1,73 @@
+﻿@page "/my-offers"
+@using main.Models
+@using main.Services
+@using Microsoft.AspNetCore.Identity
+@using main.Data
+@using System.IO
+@inject SignInManager<User> SignInManager
+@inject IOfferDataService OfferDataService
+@inject IDialogService DialogService
+@inject ISnackbar Snackbar
+@inject NavigationManager NavigationManager
+<br />
+<br />
+<br />
+<br />
+<MudContainer>
+    @if (User == null)
+    {
+        <MudProgressLinear Color="Color.Primary" Indeterminate="true" />
+    }
+    else
+    {
+        <Virtualize Context="offer" ItemsProvider="@LoadOffers">
+            <ItemContent>
+                <MudGrid >
+                    <MudItem xs="12" sm="2"></MudItem>
+                    <MudItem sm="6" xs="12">
+                        <MyOffer offer="offer" />
+                    </MudItem>
+                </MudGrid>
+            </ItemContent>
+            <Placeholder>
+                <MudCard>
+                    <MudCardContent>
+                        <MudSkeleton>
+                            <MudSkeleton SkeletonType="SkeletonType.Text" />
+                            <MudSkeleton SkeletonType="SkeletonType.Text" />
+                            <MudSkeleton SkeletonType="SkeletonType.Text" />
+                        </MudSkeleton>
+                    </MudCardContent>
+                    <MudCardActions>
+                        <MudSkeleton SkeletonType="SkeletonType.Circle" Width="64px" Height="40px" Class="ml-2" />
+                        <MudSkeleton SkeletonType="SkeletonType.Circle" Width="105px" Height="40px" Class="ml-3" />
+                    </MudCardActions>
+                </MudCard>
+            </Placeholder>
+        </Virtualize>
+    }
+    <MudScrollToTop>
+        <MudFab Color="Color.Primary" Icon="@Icons.Rounded.ArrowUpward" />
+    </MudScrollToTop>
+</MudContainer>
+
+@code{
+    private List<main.Models.Offer> offers;
+    private User User;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        User = await SignInManager.UserManager.GetUserAsync(SignInManager.Context.User);
+        //offers = await OfferDataService.GetOffersByUser(user.Id);
+    }
+
+
+    private async ValueTask<ItemsProviderResult<main.Models.Offer>> LoadOffers(
+        ItemsProviderRequest request)
+    {
+        offers = await OfferDataService.GetOffersByUser(User.Id, request.StartIndex, request.Count);
+        return new ItemsProviderResult<main.Models.Offer>(offers, offers.Count);
+    }
+
+}

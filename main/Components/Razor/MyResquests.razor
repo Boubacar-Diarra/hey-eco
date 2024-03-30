@@ -1,0 +1,55 @@
+﻿@page "/my-requests"
+@using main.Models
+@using Microsoft.AspNetCore.Identity
+@using main.Services
+@inject SignInManager<User> SignInManager
+@inject IApplicantDataService ApplicantDataService
+<br/>
+<br/>
+<br/>
+<br/>
+@if (_user != null)
+{
+    <MudGrid>
+        <MudItem xs="12" sm="2"></MudItem>
+        <MudItem sm="6" xs="12">
+            <MudAlert Class="mt-2" Dense="true" Variant="Variant.Filled" Severity="Severity.Info">
+                Si vous ne voyez plus une demande, c'est qu'elle a été refusée 😢
+            </MudAlert>
+            <br/>
+            <Virtualize Context="applicant" ItemsProvider="@LoadUserRequest">
+                <ItemContent>
+                    <MyRequest applicant="@applicant"/>
+                </ItemContent>
+                <Placeholder>
+                    <MudContainer>
+                        <MudProgressLinear Color="Color.Primary" Indeterminate="true"/>
+                    </MudContainer>
+                </Placeholder>
+            </Virtualize>
+        </MudItem>
+    </MudGrid>
+}
+else
+{
+    <MudContainer>
+        <MudProgressLinear Color="Color.Primary" Indeterminate="true" />
+    </MudContainer>
+}
+@code {
+    private User _user;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        _user = await SignInManager.UserManager.GetUserAsync(SignInManager.Context.User);
+    }
+
+    private async ValueTask<ItemsProviderResult<Applicant>> LoadUserRequest(ItemsProviderRequest request)
+    {
+        Console.WriteLine();
+        var applicant = await ApplicantDataService.GetApplicantByUser(_user, request.StartIndex, request.Count);
+        return new ItemsProviderResult<Applicant>(applicant, applicant.Count);
+    }
+
+}
